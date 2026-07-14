@@ -1,12 +1,24 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "hero",
       "settings": {
+        "image": "shopify://shop_images/black-water-in-seaside-pools.jpg",
+        "video_url": "",
         "eyebrow": "Drop 01 — Baggy Set",
         "heading": "Cut loose. Wear heavy.",
         "subheading": "Oversized, mineral-washed, dropped shoulders. The baggy shirt and trouser built for the streets — sold apart or as the set.",
         "cta_label": "Shop the drop",
+        "cta_link": "",
         "cta2_label": "The story",
         "cta2_link": "/pages/about",
         "sticky_cta": true,
@@ -15,16 +27,42 @@
     },
     "editorial": {
       "type": "editorial-grid",
+      "blocks": {
+        "s1": {
+          "type": "shot",
+          "settings": {
+            "image": "shopify://shop_images/general-clothing-natural-3.jpg",
+            "caption": "Faisalabad, 6pm",
+            "link_label": "Shop the look",
+            "link": ""
+          }
+        },
+        "s2": {
+          "type": "shot",
+          "settings": {
+            "caption": "Lahore rooftops",
+            "link_label": "Shop the look",
+            "link": ""
+          }
+        },
+        "s3": {
+          "type": "shot",
+          "settings": {
+            "caption": "Karachi nights",
+            "link_label": "Shop the look",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ],
       "settings": {
         "eyebrow": "On the block",
         "heading": "Worn in the wild"
-      },
-      "blocks": {
-        "s1": { "type": "shot", "settings": { "caption": "Faisalabad, 6pm" } },
-        "s2": { "type": "shot", "settings": { "caption": "Lahore rooftops" } },
-        "s3": { "type": "shot", "settings": { "caption": "Karachi nights" } }
-      },
-      "block_order": ["s1", "s2", "s3"]
+      }
     },
     "story": {
       "type": "brand-story",
@@ -40,9 +78,15 @@
       "type": "product-teaser",
       "settings": {
         "eyebrow": "The drop",
+        "product": "",
         "description": "240 GSM poly-cotton, mineral-washed, dropped shoulders. Wear it apart or grab the matching trouser as a set."
       }
     }
   },
-  "order": ["hero", "editorial", "story", "teaser"]
+  "order": [
+    "hero",
+    "editorial",
+    "story",
+    "teaser"
+  ]
 }
