@@ -1,0 +1,54 @@
+{% comment %}
+  Size guide slide-out drawer (not a separate page).
+  Opened by [data-open-target="SizeGuideDrawer"]. Measurements in
+  inches, oversized/baggy fit. Edit the tables here as needed.
+{% endcomment %}
+<div class="drawer drawer--left" id="SizeGuideDrawer" role="dialog" aria-modal="true" aria-label="Size guide" aria-hidden="true">
+  <div class="drawer__head">
+    <span class="drawer__title">Size guide</span>
+    <button type="button" class="drawer__close" data-drawer-close aria-label="Close size guide">
+      {% render 'icon', name: 'close' %}
+    </button>
+  </div>
+  <div class="drawer__body">
+    <p class="muted" style="font-size:.9rem;">Our fit runs baggy on purpose. If you want it less oversized, size down one.</p>
+
+    <table class="size-table">
+      <caption>Baggy shirt — garment measurements (inches)</caption>
+      <thead>
+        <tr><th>Size</th><th>Chest</th><th>Length</th><th>Shoulder</th><th>Sleeve</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>S</td><td>44</td><td>28</td><td>22</td><td>9</td></tr>
+        <tr><td>M</td><td>46</td><td>29</td><td>23</td><td>9.5</td></tr>
+        <tr><td>L</td><td>48</td><td>30</td><td>24</td><td>10</td></tr>
+        <tr><td>XL</td><td>50</td><td>31</td><td>25</td><td>10.5</td></tr>
+      </tbody>
+    </table>
+
+    <table class="size-table" style="margin-top:1.6rem;">
+      <caption>Baggy trouser — garment measurements (inches)</caption>
+      <thead>
+        <tr><th>Size</th><th>Waist</th><th>Hip</th><th>Inseam</th><th>Leg opening</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>S</td><td>28–30</td><td>44</td><td>28</td><td>9</td></tr>
+        <tr><td>M</td><td>31–33</td><td>46</td><td>29</td><td>9.5</td></tr>
+        <tr><td>L</td><td>34–36</td><td>48</td><td>30</td><td>10</td></tr>
+        <tr><td>XL</td><td>37–39</td><td>50</td><td>30.5</td><td>10.5</td></tr>
+      </tbody>
+    </table>
+
+    <div class="size-guide__how">
+      <h3 class="h3" style="font-size:1.1rem;">How to measure</h3>
+      <ol class="size-guide__how" style="padding-left:1.1rem;margin-top:.6rem;">
+        <li><strong>Chest:</strong> measure across the fullest part, armpit to armpit, and double it.</li>
+        <li><strong>Waist:</strong> measure around your natural waistline where you wear the trouser.</li>
+        <li><strong>Inseam:</strong> from crotch seam down to the hem.</li>
+        <li>Compare against a garment you already own and love — that's the most reliable method.</li>
+      </ol>
+    </div>
+
+    <p class="size-guide__note">Still unsure? Message us on WhatsApp and we'll help you pick. Exchanges available on unworn items within 7 days.</p>
+  </div>
+</div>

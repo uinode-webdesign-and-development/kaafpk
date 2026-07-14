@@ -1,0 +1,20 @@
+{% comment %}
+  Renders a price with optional compare-at (strikethrough).
+  Params: product (or) price, compare_at, class_prefix
+{% endcomment %}
+{%- liquid
+  assign cls = class_prefix | default: 'price'
+  if product
+    assign _price = product.price
+    assign _compare = product.compare_at_price
+  else
+    assign _price = price
+    assign _compare = compare_at
+  endif
+-%}
+<span class="{{ cls }}" data-product-price>{{ _price | money }}</span>
+{%- if _compare and _compare > _price -%}
+  <span class="{{ cls }}--compare" data-product-compare>{{ _compare | money }}</span>
+{%- else -%}
+  <span class="{{ cls }}--compare" data-product-compare hidden></span>
+{%- endif -%}

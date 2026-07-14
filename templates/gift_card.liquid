@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ shop.name }} — Gift card</title>
+    <style>
+      body { margin:0; background:#0d0d0d; color:#f2f2f0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; display:grid; place-items:center; min-height:100vh; padding:24px; }
+      .gc { max-width:420px; text-align:center; }
+      .gc__card { background:#141414; border:1px solid rgba(242,242,240,.12); border-radius:16px; padding:28px; margin:20px 0; }
+      .gc__amount { font-size:2.6rem; font-weight:800; color:#e0a82e; }
+      .gc__code { font-family:monospace; letter-spacing:.2em; background:#0d0d0d; border:1px dashed rgba(242,242,240,.25); border-radius:8px; padding:12px; margin-top:16px; }
+      .btn { display:inline-block; background:#e0a82e; color:#141414; text-decoration:none; font-weight:700; padding:14px 28px; border-radius:999px; margin-top:16px; }
+      img { max-width:200px; margin:0 auto; }
+    </style>
+  </head>
+  <body>
+    <div class="gc">
+      <h1 style="text-transform:uppercase;">{{ shop.name }}</h1>
+      <p>Here's your gift card.</p>
+      <div class="gc__card">
+        <div class="gc__amount">{{ gift_card.balance | money }}</div>
+        {{ gift_card.qr_identifier }}
+        <div class="gc__code">{{ gift_card.code | format_code }}</div>
+      </div>
+      <a class="btn" href="{{ shop.url }}">Shop now</a>
+    </div>
+  </body>
+</html>

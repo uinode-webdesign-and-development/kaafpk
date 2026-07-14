@@ -1,0 +1,35 @@
+{
+  "current": {
+    "wordmark_text": "KAAF",
+    "brand_tagline": "Cut loose. Wear heavy.",
+    "color_bg": "#0d0d0d",
+    "color_bg_elevated": "#141414",
+    "color_text": "#f2f2f0",
+    "color_text_muted": "#a3a3a0",
+    "color_accent": "#e0a82e",
+    "color_accent_contrast": "#141414",
+    "heading_font": "assistant_n8",
+    "body_font": "assistant_n4",
+    "heading_scale": 100,
+    "show_prepaid_badge": true,
+    "prepaid_amount": "250",
+    "prepaid_methods": "JazzCash / Easypaisa",
+    "show_cod_badge": true,
+    "bundle_shirt_tag": "shirt",
+    "bundle_trouser_tag": "trouser",
+    "bundle_saving": "500",
+    "delivery_metro_cities": "Lahore, Karachi, Faisalabad",
+    "delivery_metro_days": "2-3 days",
+    "delivery_other_days": "4-6 days",
+    "social_instagram": "",
+    "social_tiktok": "",
+    "social_whatsapp": ""
+  },
+  "presets": {
+    "kaafpk": {
+      "wordmark_text": "KAAF",
+      "brand_tagline": "Cut loose. Wear heavy.",
+      "color_accent": "#e0a82e"
+    }
+  }
+}

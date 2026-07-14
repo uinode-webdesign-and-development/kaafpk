@@ -1,0 +1,34 @@
+<section class="page-width section-pad" style="max-width:460px;">
+  <h1 class="h1" style="margin-bottom:1.5rem;">Login</h1>
+
+  {%- form 'customer_login' -%}
+    {{ form.errors | default_errors }}
+    <div class="stack">
+      <label class="visually-hidden" for="CustomerEmail">Email</label>
+      <input id="CustomerEmail" type="email" name="customer[email]" placeholder="Email" required autocomplete="email"
+             style="width:100%;background:var(--bg-elevated);border:1px solid var(--border-strong);color:var(--text);padding:.85em 1em;border-radius:999px;font-family:inherit;">
+      <label class="visually-hidden" for="CustomerPassword">Password</label>
+      <input id="CustomerPassword" type="password" name="customer[password]" placeholder="Password" required autocomplete="current-password"
+             style="width:100%;background:var(--bg-elevated);border:1px solid var(--border-strong);color:var(--text);padding:.85em 1em;border-radius:999px;font-family:inherit;">
+      <button type="submit" class="btn btn--primary btn--block">Sign in</button>
+    </div>
+  {%- endform -%}
+
+  <p class="muted" style="margin-top:1.2rem;font-size:.9rem;">
+    New here? <a class="accent" href="{{ routes.account_register_url }}">Create an account</a> ·
+    <a class="accent" href="#recover">Forgot password?</a>
+  </p>
+
+  <div id="recover" style="margin-top:2rem;">
+    {%- form 'recover_customer_password' -%}
+      {{ form.errors | default_errors }}
+      {%- if form.posted_successfully? -%}<p class="accent">We've sent you a reset link.</p>{%- endif -%}
+      <label class="muted" for="RecoverEmail" style="font-size:.85rem;">Reset your password</label>
+      <div style="display:flex;gap:.5rem;margin-top:.5rem;">
+        <input id="RecoverEmail" type="email" name="email" placeholder="Email" required
+               style="flex:1;background:var(--bg-elevated);border:1px solid var(--border-strong);color:var(--text);padding:.75em 1em;border-radius:999px;font-family:inherit;">
+        <button type="submit" class="btn btn--ghost">Send</button>
+      </div>
+    {%- endform -%}
+  </div>
+</section>

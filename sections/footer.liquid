@@ -1,0 +1,93 @@
+<footer class="footer" role="contentinfo">
+  <div class="page-width section-pad">
+    <div class="footer__top">
+      <div>
+        <div class="footer__wordmark">{{ settings.wordmark_text | default: shop.name }}</div>
+        {%- if section.settings.blurb != blank -%}
+          <p class="muted" style="max-width:34ch;margin-top:1rem;">{{ section.settings.blurb }}</p>
+        {%- endif -%}
+        <div class="footer__social">
+          {%- if settings.social_instagram != blank -%}
+            <a href="{{ settings.social_instagram }}" aria-label="Instagram" target="_blank" rel="noopener">{% render 'icon', name: 'instagram' %}</a>
+          {%- endif -%}
+          {%- if settings.social_tiktok != blank -%}
+            <a href="{{ settings.social_tiktok }}" aria-label="TikTok" target="_blank" rel="noopener">{% render 'icon', name: 'tiktok' %}</a>
+          {%- endif -%}
+          {%- if settings.social_whatsapp != blank -%}
+            <a href="{{ settings.social_whatsapp }}" aria-label="WhatsApp" target="_blank" rel="noopener">{% render 'icon', name: 'whatsapp' %}</a>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'menu' -%}
+          <div class="footer__col" {{ block.shopify_attributes }}>
+            <h4>{{ block.settings.heading }}</h4>
+            <ul>
+              {%- for link in block.settings.menu.links -%}
+                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- elsif block.type == 'newsletter' -%}
+          <div class="footer__col" {{ block.shopify_attributes }}>
+            <h4>{{ block.settings.heading }}</h4>
+            {%- if block.settings.text != blank -%}<p class="muted" style="font-size:.88rem;margin-bottom:1rem;">{{ block.settings.text }}</p>{%- endif -%}
+            {%- form 'customer', class: 'footer__newsletter' -%}
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              {%- if form.posted_successfully? -%}
+                <p class="accent" style="font-size:.9rem;">Thanks — you're on the list.</p>
+              {%- else -%}
+                <label class="visually-hidden" for="NewsletterEmail">Email</label>
+                <input id="NewsletterEmail" type="email" name="contact[email]" placeholder="Email address" required autocomplete="email">
+                <button type="submit" class="btn btn--primary btn--block">Join the drop list</button>
+              {%- endif -%}
+            {%- endform -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    <div class="footer__bottom">
+      <span>© {{ 'now' | date: '%Y' }} {{ shop.name }}. Made in Pakistan.</span>
+      <span class="muted">COD · JazzCash · Easypaisa · Card</span>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "textarea", "id": "blurb", "label": "Brand blurb", "default": "Baggy, unbothered, built to last. Made for the streets of Faisalabad, Lahore and Karachi." }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Shop" },
+        { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" }
+      ]
+    },
+    {
+      "type": "newsletter",
+      "name": "Newsletter",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Get the drops first" },
+        { "type": "text", "id": "text", "label": "Text", "default": "New releases, restocks and early access. No spam." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer",
+      "blocks": [
+        { "type": "menu" },
+        { "type": "newsletter" }
+      ]
+    }
+  ]
+}
+{% endschema %}

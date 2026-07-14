@@ -1,0 +1,82 @@
+{% comment %}
+  ============================================================
+  META PIXEL + CONVERSIONS API (CAPI)
+  ------------------------------------------------------------
+  1. Client-side Pixel: paste your Pixel ID below.
+  2. Conversions API (server-side): the CAPI access token is a
+     SECRET and must NOT live in theme code. Add it to your
+     server / app that forwards events to Meta. The placeholder
+     comment below marks where your app's event_id / bridge goes.
+  ============================================================
+{% endcomment %}
+
+{%- assign META_PIXEL_ID = '' -%}
+{%- comment %} <!-- INSERT META PIXEL ID --> {% endcomment -%}
+{%- comment %} Replace the empty string above, e.g. assign META_PIXEL_ID = '1234567890' {% endcomment -%}
+
+{%- if META_PIXEL_ID != blank -%}
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window,document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+
+  fbq('init', '{{ META_PIXEL_ID }}');
+  fbq('track', 'PageView');
+
+  {% comment %} ---- Add-to-cart event bridge (client) ---- {% endcomment %}
+  window.KAAF = window.KAAF || {};
+  window.KAAF.trackAddToCart = function (item) {
+    try {
+      var eventId = 'atc_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+      fbq('track', 'AddToCart', {
+        content_ids: [item.product_id],
+        content_type: 'product',
+        content_name: item.product_title,
+        value: (item.final_line_price || item.price || 0) / 100,
+        currency: {{ shop.currency | json }}
+      }, { eventID: eventId });
+
+      {% comment %}
+        <!-- INSERT CAPI ACCESS TOKEN -->
+        Do NOT put the token here. Instead POST the same eventID to your
+        server endpoint so it can call Meta's Conversions API with the
+        secret token, deduplicating on eventID. Example:
+        fetch('/apps/kaaf-capi/atc', { method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ event_id: eventId, item: item }) });
+      {% endcomment %}
+    } catch (e) {}
+  };
+</script>
+<noscript>
+  <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id={{ META_PIXEL_ID }}&ev=PageView&noscript=1" alt="">
+</noscript>
+{%- else -%}
+{% comment %}
+  Meta Pixel not configured yet.
+  <!-- INSERT META PIXEL ID -->  in this file (snippets/meta-pixel.liquid)
+  <!-- INSERT CAPI ACCESS TOKEN --> belongs on your CAPI server, never in theme code.
+{% endcomment %}
+{%- endif -%}
+
+{%- comment %} ---- ViewContent on product pages ---- {% endcomment -%}
+{%- if template.name == 'product' and META_PIXEL_ID != blank -%}
+<script>
+  window.addEventListener('DOMContentLoaded', function () {
+    if (typeof fbq !== 'function') return;
+    fbq('track', 'ViewContent', {
+      content_ids: [{{ product.id | json }}],
+      content_type: 'product',
+      content_name: {{ product.title | json }},
+      value: {{ product.price | divided_by: 100.0 | json }},
+      currency: {{ shop.currency | json }}
+    });
+  });
+</script>
+{%- endif -%}

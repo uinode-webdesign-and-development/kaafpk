@@ -1,0 +1,22 @@
+<section class="page-width section-pad" style="max-width:640px;">
+  <h1 class="h1" style="margin-bottom:1.5rem;">Addresses</h1>
+  {%- for address in customer.addresses -%}
+    <div style="border:1px solid var(--border);border-radius:10px;padding:1.2rem;margin-bottom:1rem;">
+      {%- if address == customer.default_address -%}<span class="eyebrow">Default</span>{%- endif -%}
+      <p style="margin:.5rem 0;">{{ address | format_address }}</p>
+    </div>
+  {%- else -%}
+    <p class="muted">No addresses saved yet.</p>
+  {%- endfor -%}
+
+  <h2 class="h3" style="margin:2rem 0 1rem;">Add a new address</h2>
+  {%- form 'customer_address', customer.new_address -%}
+    <div class="stack">
+      <input type="text" name="address[address1]" placeholder="Address" style="width:100%;background:var(--bg-elevated);border:1px solid var(--border-strong);color:var(--text);padding:.85em 1em;border-radius:999px;font-family:inherit;">
+      <input type="text" name="address[city]" placeholder="City" style="width:100%;background:var(--bg-elevated);border:1px solid var(--border-strong);color:var(--text);padding:.85em 1em;border-radius:999px;font-family:inherit;">
+      <input type="text" name="address[phone]" placeholder="Phone" style="width:100%;background:var(--bg-elevated);border:1px solid var(--border-strong);color:var(--text);padding:.85em 1em;border-radius:999px;font-family:inherit;">
+      <button type="submit" class="btn btn--primary btn--block">Save address</button>
+    </div>
+  {%- endform -%}
+  <p style="margin-top:2rem;"><a class="link-underline" href="{{ routes.account_url }}">Back to account</a></p>
+</section>

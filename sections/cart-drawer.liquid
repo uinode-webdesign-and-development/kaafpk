@@ -1,0 +1,104 @@
+{% comment %}
+  Slide-out cart drawer. Rendered statically in theme.liquid via
+  {% section 'cart-drawer' %} so the Section Rendering API can
+  refresh it (?section_id=cart-drawer). Bundle discount detection
+  runs in Liquid using product tags.
+{% endcomment %}
+
+{%- liquid
+  assign shirt_tag = settings.bundle_shirt_tag | downcase
+  assign trouser_tag = settings.bundle_trouser_tag | downcase
+  assign has_shirt = false
+  assign has_trouser = false
+  for item in cart.items
+    assign tags_down = item.product.tags | join: ',' | downcase
+    if tags_down contains shirt_tag
+      assign has_shirt = true
+    endif
+    if tags_down contains trouser_tag
+      assign has_trouser = true
+    endif
+  endfor
+-%}
+
+<div class="drawer drawer--cart" id="CartDrawer" role="dialog" aria-modal="true" aria-label="Shopping bag" aria-hidden="true">
+  <div class="drawer__head">
+    <span class="drawer__title">Your bag <span class="muted" data-cart-count>{{ cart.item_count }}</span></span>
+    <button type="button" class="drawer__close" data-drawer-close aria-label="Close bag">
+      {% render 'icon', name: 'close' %}
+    </button>
+  </div>
+
+  <div data-cart-contents>
+    <div class="drawer__body" id="CartDrawerBody">
+      {%- if cart.item_count == 0 -%}
+        <div class="cart-empty">
+          <p>Your bag is empty.</p>
+          <a class="btn btn--ghost" href="{{ routes.all_products_collection_url }}" data-drawer-close>Shop the drop</a>
+        </div>
+      {%- else -%}
+
+        {%- if has_shirt and has_trouser -%}
+          <div class="bundle-banner">
+            {% render 'icon', name: 'check' %}
+            <div>Bundle unlocked — <strong>you save Rs {{ settings.bundle_saving }}</strong> on the shirt&nbsp;+&nbsp;trouser set. Applied at checkout.</div>
+          </div>
+        {%- elsif has_shirt or has_trouser -%}
+          {%- if has_shirt -%}{%- assign missing = 'trouser' -%}{%- else -%}{%- assign missing = 'shirt' -%}{%- endif -%}
+          <div class="bundle-banner bundle-banner--nudge">
+            {% render 'icon', name: 'arrow-up-right' %}
+            <div>Add the matching <strong>{{ missing }}</strong> to unlock <strong>Rs {{ settings.bundle_saving }} off</strong> the set.</div>
+          </div>
+        {%- endif -%}
+
+        {%- for item in cart.items -%}
+          <div class="cart-line" data-line-key="{{ item.key }}">
+            <a class="cart-line__media" href="{{ item.url }}">
+              {%- if item.image -%}
+                <img src="{{ item.image | image_url: width: 160 }}" alt="{{ item.image.alt | escape }}" width="72" height="90" loading="lazy">
+              {%- endif -%}
+            </a>
+            <div>
+              <a class="cart-line__title" href="{{ item.url }}">{{ item.product.title }}</a>
+              {%- unless item.product.has_only_default_variant -%}
+                <div class="cart-line__variant">{{ item.variant.title }}</div>
+              {%- endunless -%}
+              <div class="cart-line__price">{{ item.final_line_price | money }}</div>
+              <div class="cart-line__qty" data-key="{{ item.key }}">
+                <button type="button" data-qty-down aria-label="Decrease quantity">&minus;</button>
+                <span>{{ item.quantity }}</span>
+                <button type="button" data-qty-up aria-label="Increase quantity">+</button>
+              </div>
+            </div>
+            <button type="button" class="cart-line__remove" data-remove aria-label="Remove {{ item.product.title | escape }}">Remove</button>
+          </div>
+        {%- endfor -%}
+
+      {%- endif -%}
+    </div>
+
+    {%- if cart.item_count > 0 -%}
+      <div class="drawer__foot" id="CartDrawerFoot">
+        <div class="cart-subtotal">
+          <span class="muted" style="text-transform:uppercase;letter-spacing:.1em;font-size:.74rem;font-weight:700;">Subtotal</span>
+          <span class="price">{{ cart.total_price | money }}</span>
+        </div>
+        <p class="cart-note">Shipping &amp; discounts calculated at checkout.</p>
+        <form action="{{ routes.cart_url }}" method="post">
+          <button type="submit" name="checkout" class="btn btn--primary btn--block btn--lg">Checkout</button>
+        </form>
+        <div class="cart-methods">
+          {% render 'icon', name: 'cash' %}
+          COD &nbsp;•&nbsp; JazzCash &nbsp;•&nbsp; Easypaisa &nbsp;•&nbsp; Card
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,31 @@
+<section class="page-width section-pad">
+  <h1 class="h1" style="margin-bottom:1.5rem;">Search</h1>
+  <form action="{{ routes.search_url }}" method="get" role="search" style="max-width:520px;margin-bottom:2.5rem;">
+    <div style="display:flex;gap:.6rem;">
+      <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search products…"
+             style="flex:1;background:var(--bg-elevated);border:1px solid var(--border-strong);color:var(--text);padding:.85em 1em;border-radius:999px;font-family:inherit;">
+      <button type="submit" class="btn btn--primary">Search</button>
+    </div>
+  </form>
+
+  {%- if search.performed -%}
+    {%- if search.results.size > 0 -%}
+      <p class="muted" style="margin-bottom:1.5rem;">{{ search.results_count }} result{{ search.results_count | pluralize: '', 's' }} for “{{ search.terms }}”.</p>
+      <div class="editorial" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr));">
+        {%- for item in search.results -%}
+          {%- if item.object_type == 'product' -%}
+            <div data-reveal>{% render 'product-card', product: item %}</div>
+          {%- else -%}
+            <a href="{{ item.url }}" class="rte" data-reveal><h3 class="h3">{{ item.title }}</h3></a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <p class="muted">No results for “{{ search.terms }}”.</p>
+    {%- endif -%}
+  {%- endif -%}
+</section>
+
+{% schema %}
+{ "name": "Search", "tag": "section", "settings": [] }
+{% endschema %}

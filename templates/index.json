@@ -1,0 +1,48 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow": "Drop 01 — Baggy Set",
+        "heading": "Cut loose. Wear heavy.",
+        "subheading": "Oversized, mineral-washed, dropped shoulders. The baggy shirt and trouser built for the streets — sold apart or as the set.",
+        "cta_label": "Shop the drop",
+        "cta2_label": "The story",
+        "cta2_link": "/pages/about",
+        "sticky_cta": true,
+        "show_scroll_hint": true
+      }
+    },
+    "editorial": {
+      "type": "editorial-grid",
+      "settings": {
+        "eyebrow": "On the block",
+        "heading": "Worn in the wild"
+      },
+      "blocks": {
+        "s1": { "type": "shot", "settings": { "caption": "Faisalabad, 6pm" } },
+        "s2": { "type": "shot", "settings": { "caption": "Lahore rooftops" } },
+        "s3": { "type": "shot", "settings": { "caption": "Karachi nights" } }
+      },
+      "block_order": ["s1", "s2", "s3"]
+    },
+    "story": {
+      "type": "brand-story",
+      "settings": {
+        "eyebrow": "Who we are",
+        "quote": "We make one thing, and we make it heavy.",
+        "body": "<p>kaafpk started with a single idea — a baggy fit that actually holds up. No 12-product catalog, no fast-fashion churn. One shirt, one trouser, cut oversized and washed soft, made in Faisalabad and shipped across Pakistan.</p>",
+        "link_label": "Read the story",
+        "link": "/pages/about"
+      }
+    },
+    "teaser": {
+      "type": "product-teaser",
+      "settings": {
+        "eyebrow": "The drop",
+        "description": "240 GSM poly-cotton, mineral-washed, dropped shoulders. Wear it apart or grab the matching trouser as a set."
+      }
+    }
+  },
+  "order": ["hero", "editorial", "story", "teaser"]
+}

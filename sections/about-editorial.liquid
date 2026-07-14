@@ -1,0 +1,72 @@
+<section class="about-hero">
+  <div class="about-hero__media">
+    {%- if section.settings.image != blank -%}
+      <img src="{{ section.settings.image | image_url: width: 2000 }}" alt="{{ section.settings.image.alt | escape }}" width="{{ section.settings.image.width }}" height="{{ section.settings.image.height }}" fetchpriority="high">
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder' }}
+    {%- endif -%}
+  </div>
+  <div class="about-hero__inner">
+    {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+    <h1 class="h-display" style="margin-top:.6rem;">{{ section.settings.heading | default: 'Not a brand. A uniform.' }}</h1>
+  </div>
+</section>
+
+<section class="page-width section-pad">
+  <div class="about-body">
+    {%- if section.settings.body != blank -%}
+      {{ section.settings.body }}
+    {%- endif -%}
+
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'paragraph' -%}
+          <div class="about-body" {{ block.shopify_attributes }} data-reveal>
+            {%- if block.settings.text != blank -%}<div class="rte" style="color:var(--text);font-size:clamp(1.05rem,1.6vw,1.25rem);">{{ block.settings.text }}</div>{%- endif -%}
+          </div>
+        {%- when 'image' -%}
+          <figure {{ block.shopify_attributes }} data-reveal style="margin:clamp(32px,6vw,72px) 0;">
+            {%- if block.settings.image != blank -%}
+              <img src="{{ block.settings.image | image_url: width: 1400 }}" alt="{{ block.settings.image.alt | escape }}" width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}" loading="lazy" style="width:100%;">
+            {%- endif -%}
+            {%- if block.settings.caption != blank -%}<figcaption class="muted" style="font-size:.82rem;margin-top:.6rem;text-transform:uppercase;letter-spacing:.14em;">{{ block.settings.caption }}</figcaption>{%- endif -%}
+          </figure>
+        {%- when 'signature' -%}
+          <p class="about-sign" {{ block.shopify_attributes }}>{{ block.settings.text }}</p>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Hero image" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "kaafpk — since 2024" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Not a brand. A uniform." },
+    { "type": "richtext", "id": "body", "label": "Opening paragraph", "default": "<p>I couldn't find a baggy fit in Pakistan that didn't fall apart after three washes. So I made one. That's the whole story — but here's the longer version.</p>" }
+  ],
+  "blocks": [
+    { "type": "paragraph", "name": "Paragraph", "settings": [
+      { "type": "richtext", "id": "text", "label": "Text" }
+    ]},
+    { "type": "image", "name": "Image", "settings": [
+      { "type": "image_picker", "id": "image", "label": "Image" },
+      { "type": "text", "id": "caption", "label": "Caption" }
+    ]},
+    { "type": "signature", "name": "Signature", "limit": 1, "settings": [
+      { "type": "text", "id": "text", "label": "Signature", "default": "— The kaafpk team, Faisalabad" }
+    ]}
+  ],
+  "presets": [
+    { "name": "About", "blocks": [
+      { "type": "paragraph" },
+      { "type": "image" },
+      { "type": "paragraph" },
+      { "type": "signature" }
+    ]}
+  ]
+}
+{% endschema %}

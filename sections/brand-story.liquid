@@ -1,0 +1,45 @@
+<section class="page-width section-pad brand-story">
+  <div class="brand-story__grid">
+    <div class="brand-story__body" data-reveal>
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      {%- if section.settings.quote != blank -%}
+        <p class="pull-quote" style="margin-top:1rem;">{{ section.settings.quote }}</p>
+      {%- endif -%}
+      {%- if section.settings.body != blank -%}
+        <div class="rte" style="margin-top:1.4rem;">{{ section.settings.body }}</div>
+      {%- endif -%}
+      {%- if section.settings.link != blank -%}
+        <div style="margin-top:1.6rem;">
+          <a class="link-underline" href="{{ section.settings.link }}">{{ section.settings.link_label | default: 'Read the story' }} {% render 'icon', name: 'arrow-up-right' %}</a>
+        </div>
+      {%- endif -%}
+    </div>
+    <div class="brand-story__media" data-reveal>
+      {%- if section.settings.image != blank -%}
+        <img src="{{ section.settings.image | image_url: width: 1000 }}"
+             srcset="{{ section.settings.image | image_url: width: 600 }} 600w, {{ section.settings.image | image_url: width: 1000 }} 1000w"
+             sizes="(max-width: 749px) 90vw, 40vw"
+             width="{{ section.settings.image.width }}" height="{{ section.settings.image.height }}"
+             alt="{{ section.settings.image.alt | escape }}" loading="lazy" decoding="async">
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder' }}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Brand story",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Who we are" },
+    { "type": "textarea", "id": "quote", "label": "Pull quote", "default": "We make one thing, and we make it heavy." },
+    { "type": "richtext", "id": "body", "label": "Body", "default": "<p>kaafpk started with a single idea — a baggy fit that actually holds up. No 12-product catalog, no fast-fashion churn. One shirt, one trouser, cut oversized and washed soft, made in Faisalabad and shipped across Pakistan.</p>" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "Read the story" },
+    { "type": "url", "id": "link", "label": "Link" },
+    { "type": "image_picker", "id": "image", "label": "Image" }
+  ],
+  "presets": [{ "name": "Brand story" }]
+}
+{% endschema %}

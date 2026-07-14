@@ -1,0 +1,20 @@
+<section class="page-width section-pad">
+  <h1 class="h1" style="margin-bottom:2rem;">{{ blog.title }}</h1>
+  <div class="editorial" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr));">
+    {%- for article in blog.articles -%}
+      <a href="{{ article.url }}" class="product-card" data-reveal>
+        {%- if article.image -%}
+          <div class="product-card__media" style="aspect-ratio:4/3;">
+            <img class="is-primary" src="{{ article.image | image_url: width: 800 }}" alt="{{ article.title | escape }}" loading="lazy" width="{{ article.image.width }}" height="{{ article.image.height }}">
+          </div>
+        {%- endif -%}
+        <div class="product-card__title">{{ article.title }}</div>
+        <p class="muted" style="margin-top:.4rem;">{{ article.excerpt_or_content | strip_html | truncate: 110 }}</p>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Blog", "tag": "section", "settings": [] }
+{% endschema %}

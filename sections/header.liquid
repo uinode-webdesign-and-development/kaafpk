@@ -1,0 +1,62 @@
+{%- liquid
+  assign menu = section.settings.menu
+-%}
+<header class="header" role="banner">
+  <div class="header__inner">
+    <button type="button" class="icon-btn header__burger" data-mobile-nav-open aria-label="Open menu" aria-controls="MobileNav">
+      {% render 'icon', name: 'menu' %}
+    </button>
+
+    <nav class="header__nav" aria-label="Primary">
+      {%- for link in menu.links limit: 3 -%}
+        <a href="{{ link.url }}">{{ link.title }}</a>
+      {%- else -%}
+        <a href="{{ routes.all_products_collection_url }}">Shop</a>
+        <a href="/pages/about">About</a>
+      {%- endfor -%}
+    </nav>
+
+    <a href="{{ routes.root_url }}" class="header__wordmark" aria-label="{{ shop.name }} home">
+      {%- if settings.wordmark_image != blank -%}
+        <img src="{{ settings.wordmark_image | image_url: width: 240 }}" alt="{{ shop.name | escape }}" width="120" height="30">
+      {%- else -%}
+        {{ settings.wordmark_text | default: shop.name }}
+      {%- endif -%}
+    </a>
+
+    <div class="header__actions">
+      {%- if section.settings.show_search -%}
+        <a href="{{ routes.search_url }}" class="icon-btn" aria-label="Search">{% render 'icon', name: 'search' %}</a>
+      {%- endif -%}
+      <button type="button" class="icon-btn" data-cart-open aria-label="Open bag">
+        {% render 'icon', name: 'cart' %}
+        <span class="cart-count" data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+{%- comment %} Mobile nav drawer {% endcomment -%}
+<div class="mobile-nav" id="MobileNav" aria-hidden="true">
+  <button type="button" class="icon-btn mobile-nav__close" data-drawer-close aria-label="Close menu">
+    {% render 'icon', name: 'close' %}
+  </button>
+  <ul class="mobile-nav__links">
+    {%- for link in menu.links -%}
+      <li><a href="{{ link.url }}" data-drawer-close>{{ link.title }}</a></li>
+    {%- else -%}
+      <li><a href="{{ routes.all_products_collection_url }}" data-drawer-close>Shop</a></li>
+      <li><a href="/pages/about" data-drawer-close>About</a></li>
+    {%- endfor -%}
+  </ul>
+</div>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
+    { "type": "checkbox", "id": "show_search", "label": "Show search icon", "default": true }
+  ]
+}
+{% endschema %}

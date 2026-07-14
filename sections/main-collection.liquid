@@ -1,0 +1,35 @@
+<section class="page-width section-pad">
+  <header style="margin-bottom:clamp(24px,4vw,48px);max-width:60ch;">
+    <span class="eyebrow">{{ collection.products_count }} {% if collection.products_count == 1 %}piece{% else %}pieces{% endif %}</span>
+    <h1 class="h1" style="margin-top:.5rem;">{{ collection.title | default: 'Shop' }}</h1>
+    {%- if collection.description != blank -%}
+      <div class="rte" style="margin-top:1rem;max-width:52ch;">{{ collection.description }}</div>
+    {%- endif -%}
+  </header>
+
+  {%- if collection.products.size > 0 -%}
+    {%- paginate collection.products by 12 -%}
+    <div class="editorial editorial--3" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr));">
+      {%- for product in collection.products -%}
+        <div data-reveal>{% render 'product-card', product: product, lazy: forloop.first %}</div>
+      {%- endfor -%}
+    </div>
+    {%- if paginate.pages > 1 -%}
+      <nav class="pagination" style="display:flex;gap:1rem;justify-content:center;margin-top:3rem;" aria-label="Pagination">
+        {%- if paginate.previous -%}<a class="link-underline" href="{{ paginate.previous.url }}">Prev</a>{%- endif -%}
+        {%- if paginate.next -%}<a class="link-underline" href="{{ paginate.next.url }}">Next {% render 'icon', name: 'arrow' %}</a>{%- endif -%}
+      </nav>
+    {%- endif -%}
+    {%- endpaginate -%}
+  {%- else -%}
+    <p class="muted">Nothing here yet. Check back for the next drop.</p>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Collection",
+  "tag": "section",
+  "settings": []
+}
+{% endschema %}

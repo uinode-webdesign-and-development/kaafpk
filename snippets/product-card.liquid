@@ -1,0 +1,52 @@
+{% comment %}
+  Product card with hover-swap image and quick add-to-cart.
+  Params: product, lazy (bool)
+{% endcomment %}
+{%- liquid
+  assign img1 = product.featured_media
+  assign img2 = product.media[1]
+  assign loading = 'lazy'
+  if lazy == false
+    assign loading = 'eager'
+  endif
+  assign variant = product.selected_or_first_available_variant
+-%}
+<div class="product-card">
+  <div class="product-card__media">
+    <a href="{{ product.url }}" aria-label="{{ product.title | escape }}" style="position:absolute;inset:0;z-index:1;">
+      {%- if img1 -%}
+        <img class="is-primary"
+             src="{{ img1 | image_url: width: 700 }}"
+             srcset="{{ img1 | image_url: width: 400 }} 400w, {{ img1 | image_url: width: 700 }} 700w, {{ img1 | image_url: width: 1000 }} 1000w"
+             sizes="(max-width: 749px) 90vw, 45vw"
+             width="{{ img1.width }}" height="{{ img1.height }}"
+             alt="{{ img1.alt | default: product.title | escape }}" loading="{{ loading }}" decoding="async">
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder' }}
+      {%- endif -%}
+      {%- if img2 -%}
+        <img class="is-secondary"
+             src="{{ img2 | image_url: width: 700 }}"
+             sizes="(max-width: 749px) 90vw, 45vw"
+             width="{{ img2.width }}" height="{{ img2.height }}"
+             alt="{{ img2.alt | default: product.title | escape }}" loading="lazy" decoding="async">
+      {%- endif -%}
+    </a>
+
+    {%- if variant %}
+      <div class="product-card__quick">
+        <form data-atc>
+          <input type="hidden" name="id" value="{{ variant.id }}">
+          <button type="submit" class="btn btn--primary btn--block" {% unless variant.available %}aria-disabled="true"{% endunless %}>
+            {% if variant.available %}Quick add — {{ variant.price | money }}{% else %}Sold out{% endif %}
+          </button>
+        </form>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <a href="{{ product.url }}">
+    <div class="product-card__title">{{ product.title }}</div>
+  </a>
+  <div class="product-card__price">{{ product.price | money }}</div>
+</div>

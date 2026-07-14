@@ -1,0 +1,40 @@
+{% comment %}
+  Product JSON-LD structured data for SEO / rich results.
+  Requires: product
+{% endcomment %}
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign product_media = product.media | where: 'media_type', 'image'
+-%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "description": {{ product.description | strip_html | truncate: 300 | json }},
+  "brand": { "@type": "Brand", "name": {{ shop.name | json }} },
+  "sku": {{ current_variant.sku | default: current_variant.id | json }},
+  "url": {{ request.origin | append: product.url | json }},
+  {%- if product.featured_media -%}
+  "image": [
+    {%- for media in product_media limit: 6 -%}
+      {{ media | image_url: width: 1200 | prepend: 'https:' | json }}{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ],
+  {%- endif -%}
+  "offers": [
+    {%- for variant in product.variants -%}
+    {
+      "@type": "Offer",
+      "sku": {{ variant.sku | default: variant.id | json }},
+      "name": {{ variant.title | json }},
+      "price": {{ variant.price | divided_by: 100.0 | json }},
+      "priceCurrency": {{ shop.currency | json }},
+      "availability": "https://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}",
+      "url": {{ request.origin | append: product.url | append: '?variant=' | append: variant.id | json }},
+      "itemCondition": "https://schema.org/NewCondition"
+    }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ]
+}
+</script>

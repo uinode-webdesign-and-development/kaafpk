@@ -1,0 +1,21 @@
+{
+  "sections": {
+    "about": {
+      "type": "about-editorial",
+      "settings": {
+        "eyebrow": "kaafpk — since 2024",
+        "heading": "Not a brand. A uniform.",
+        "body": "<p>I couldn't find a baggy fit in Pakistan that didn't fall apart after three washes. So I made one. That's the whole story — but here's the longer version.</p>"
+      },
+      "blocks": {
+        "p1": { "type": "paragraph", "settings": { "text": "<p>Everything on the market was either too tight, too thin, or priced like it was flown in from another planet. Streetwear here got treated like a costume — a logo slapped on a cheap blank. We wanted the opposite: one shirt and one trouser, cut baggy, washed soft, heavy enough to actually own.</p>" } },
+        "img": { "type": "image", "settings": { "caption": "Cut and sewn in Faisalabad" } },
+        "p2": { "type": "paragraph", "settings": { "text": "<p>We make in small runs out of Faisalabad, ship COD across the country, and keep the range deliberately tiny. No 40-SKU catalogue, no seasonal churn. When a drop sells out, it sells out. That's the point — you're not buying fast fashion, you're buying the fit you'll reach for every week.</p>" } },
+        "p3": { "type": "paragraph", "settings": { "text": "<p>Wear it to college, to the court, to the block. Wear it apart or wear the set. Just wear it heavy.</p>" } },
+        "sign": { "type": "signature", "settings": { "text": "— The kaafpk team, Faisalabad" } }
+      },
+      "block_order": ["p1", "img", "p2", "p3", "sign"]
+    }
+  },
+  "order": ["about"]
+}

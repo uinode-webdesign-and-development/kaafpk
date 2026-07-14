@@ -1,0 +1,20 @@
+<section class="page-width section-pad">
+  <h1 class="h1" style="margin-bottom:.5rem;">{{ order.name }}</h1>
+  <p class="muted" style="margin-bottom:2rem;">Placed {{ order.created_at | date: '%d %B %Y' }} · {{ order.financial_status_label }}</p>
+  <div style="overflow-x:auto;">
+    <table class="size-table" style="min-width:560px;">
+      <thead><tr><th>Item</th><th>Qty</th><th>Price</th><th>Total</th></tr></thead>
+      <tbody>
+        {%- for line in order.line_items -%}
+          <tr><td style="text-align:left;">{{ line.title }}</td><td>{{ line.quantity }}</td><td>{{ line.price | money }}</td><td>{{ line.final_line_price | money }}</td></tr>
+        {%- endfor -%}
+      </tbody>
+      <tfoot>
+        <tr><td colspan="3" style="text-align:right;">Subtotal</td><td>{{ order.line_items_subtotal_price | money }}</td></tr>
+        <tr><td colspan="3" style="text-align:right;">Shipping</td><td>{{ order.shipping_price | money }}</td></tr>
+        <tr><td colspan="3" style="text-align:right;"><strong>Total</strong></td><td><strong>{{ order.total_price | money }}</strong></td></tr>
+      </tfoot>
+    </table>
+  </div>
+  <p style="margin-top:2rem;"><a class="link-underline" href="{{ routes.account_url }}">Back to account</a></p>
+</section>

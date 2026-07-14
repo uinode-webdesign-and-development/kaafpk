@@ -1,0 +1,19 @@
+<section class="page-width section-pad">
+  <h1 class="h1" style="margin-bottom:2rem;">Collections</h1>
+  <div class="editorial" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr));">
+    {%- for collection in collections -%}
+      <a href="{{ collection.url }}" class="editorial__tile" data-reveal>
+        {%- if collection.featured_image -%}
+          <img src="{{ collection.featured_image | image_url: width: 800 }}" alt="{{ collection.title | escape }}" loading="lazy" width="{{ collection.featured_image.width }}" height="{{ collection.featured_image.height }}">
+        {%- else -%}
+          {{ 'collection-1' | placeholder_svg_tag: 'placeholder' }}
+        {%- endif -%}
+        <div class="editorial__caption"><span class="eyebrow" style="color:var(--text);">{{ collection.title }}</span></div>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Collections list", "tag": "section", "settings": [] }
+{% endschema %}

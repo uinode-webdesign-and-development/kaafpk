@@ -1,0 +1,214 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "kaafpk",
+    "theme_version": "1.0.0",
+    "theme_author": "kaafpk.store",
+    "theme_documentation_url": "https://kaafpk.store",
+    "theme_support_url": "https://kaafpk.store"
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      {
+        "type": "text",
+        "id": "wordmark_text",
+        "label": "Wordmark text",
+        "default": "KAAF"
+      },
+      {
+        "type": "image_picker",
+        "id": "wordmark_image",
+        "label": "Wordmark image (optional, overrides text)"
+      },
+      {
+        "type": "text",
+        "id": "brand_tagline",
+        "label": "Brand tagline",
+        "default": "Cut loose. Wear heavy."
+      }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_bg",
+        "label": "Background",
+        "default": "#0d0d0d"
+      },
+      {
+        "type": "color",
+        "id": "color_bg_elevated",
+        "label": "Elevated surface",
+        "default": "#141414"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Text",
+        "default": "#f2f2f0"
+      },
+      {
+        "type": "color",
+        "id": "color_text_muted",
+        "label": "Muted text",
+        "default": "#a3a3a0"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Accent",
+        "info": "Single bold accent. Premium amber-gold recommended.",
+        "default": "#e0a82e"
+      },
+      {
+        "type": "color",
+        "id": "color_accent_contrast",
+        "label": "Accent text (on accent buttons)",
+        "default": "#141414"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "heading_font",
+        "label": "Heading font",
+        "info": "For the condensed streetwear look, switch to Archivo Narrow or Oswald here.",
+        "default": "assistant_n8"
+      },
+      {
+        "type": "font_picker",
+        "id": "body_font",
+        "label": "Body font",
+        "default": "assistant_n4"
+      },
+      {
+        "type": "range",
+        "id": "heading_scale",
+        "label": "Heading scale",
+        "min": 90,
+        "max": 130,
+        "step": 5,
+        "unit": "%",
+        "default": 100
+      }
+    ]
+  },
+  {
+    "name": "Commerce",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Prepaid discount"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_prepaid_badge",
+        "label": "Show prepaid-discount badge",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "prepaid_amount",
+        "label": "Prepaid saving amount (PKR)",
+        "default": "250"
+      },
+      {
+        "type": "text",
+        "id": "prepaid_methods",
+        "label": "Prepaid methods label",
+        "default": "JazzCash / Easypaisa"
+      },
+      {
+        "type": "header",
+        "content": "Cash on delivery"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_cod_badge",
+        "label": "Show COD-available badge",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Bundle"
+      },
+      {
+        "type": "text",
+        "id": "bundle_shirt_tag",
+        "label": "Shirt product tag",
+        "info": "Products tagged with this count as the shirt in the bundle.",
+        "default": "shirt"
+      },
+      {
+        "type": "text",
+        "id": "bundle_trouser_tag",
+        "label": "Trouser product tag",
+        "default": "trouser"
+      },
+      {
+        "type": "text",
+        "id": "bundle_saving",
+        "label": "Bundle saving message (PKR)",
+        "default": "500"
+      }
+    ]
+  },
+  {
+    "name": "Delivery estimates",
+    "settings": [
+      {
+        "type": "text",
+        "id": "delivery_metro_cities",
+        "label": "Metro cities (comma separated)",
+        "default": "Lahore, Karachi, Faisalabad"
+      },
+      {
+        "type": "text",
+        "id": "delivery_metro_days",
+        "label": "Metro delivery estimate",
+        "default": "2-3 days"
+      },
+      {
+        "type": "text",
+        "id": "delivery_other_days",
+        "label": "Elsewhere delivery estimate",
+        "default": "4-6 days"
+      }
+    ]
+  },
+  {
+    "name": "Analytics",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Meta Pixel and Conversions API are wired in theme.liquid and snippets/meta-pixel.liquid. Search the theme for the INSERT comments to add your IDs."
+      }
+    ]
+  },
+  {
+    "name": "Social",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram",
+        "label": "Instagram URL"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok",
+        "label": "TikTok URL"
+      },
+      {
+        "type": "text",
+        "id": "social_whatsapp",
+        "label": "WhatsApp number / URL"
+      }
+    ]
+  }
+]

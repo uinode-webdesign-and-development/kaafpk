@@ -1,0 +1,71 @@
+{%- liquid
+  assign product = section.settings.product
+  assign variant = product.selected_or_first_available_variant
+-%}
+<section class="page-width section-pad product-teaser">
+  <div class="product-teaser__grid">
+    <div class="product-teaser__media" data-reveal>
+      {%- if product != blank and product.featured_media -%}
+        <img src="{{ product.featured_media | image_url: width: 1000 }}"
+             srcset="{{ product.featured_media | image_url: width: 600 }} 600w, {{ product.featured_media | image_url: width: 1000 }} 1000w"
+             sizes="(max-width: 749px) 90vw, 45vw"
+             width="{{ product.featured_media.width }}" height="{{ product.featured_media.height }}"
+             alt="{{ product.featured_media.alt | default: product.title | escape }}" loading="lazy" decoding="async">
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder' }}
+      {%- endif -%}
+    </div>
+
+    <div data-reveal>
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h2 class="h1" style="margin-top:.6rem;">{{ product.title | default: 'The Baggy Set' }}</h2>
+
+      {%- if product != blank -%}
+        <div class="product-teaser__price">
+          {% render 'price', product: product %}
+        </div>
+
+        <div class="product-badges" style="margin-top:1rem;">
+          {%- if settings.show_prepaid_badge -%}
+            <span class="badge badge--prepaid">{% render 'icon', name: 'wallet' %} Save Rs {{ settings.prepaid_amount }} prepaid</span>
+          {%- endif -%}
+          {%- if settings.show_cod_badge -%}
+            <span class="badge badge--cod">{% render 'icon', name: 'cash' %} COD available</span>
+          {%- endif -%}
+        </div>
+
+        {%- if section.settings.description != blank -%}
+          <p class="muted" style="margin-top:1.2rem;max-width:44ch;">{{ section.settings.description }}</p>
+        {%- endif -%}
+
+        <div style="display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.6rem;">
+          {%- if variant -%}
+            <form data-atc>
+              <input type="hidden" name="id" value="{{ variant.id }}">
+              <button type="submit" class="btn btn--primary btn--lg" {% unless variant.available %}aria-disabled="true"{% endunless %}>
+                {% if variant.available %}Quick add{% else %}Sold out{% endif %}
+                {% render 'icon', name: 'cart' %}
+              </button>
+            </form>
+          {%- endif -%}
+          <a href="{{ product.url }}" class="btn btn--ghost btn--lg">View product</a>
+        </div>
+      {%- else -%}
+        <p class="muted" style="margin-top:1rem;">Select a product in the theme editor.</p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product teaser",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The drop" },
+    { "type": "product", "id": "product", "label": "Product" },
+    { "type": "textarea", "id": "description", "label": "Short description", "default": "240 GSM poly-cotton, mineral-washed, dropped shoulders. Wear it apart or grab the matching trouser as a set." }
+  ],
+  "presets": [{ "name": "Product teaser" }]
+}
+{% endschema %}

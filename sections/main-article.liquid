@@ -1,0 +1,14 @@
+<article class="page-width section-pad">
+  <div style="max-width:64ch;margin-inline:auto;">
+    <span class="eyebrow">{{ article.published_at | date: '%d %B %Y' }}</span>
+    <h1 class="h1" style="margin:.6rem 0 1.5rem;">{{ article.title }}</h1>
+    {%- if article.image -%}
+      <img src="{{ article.image | image_url: width: 1400 }}" alt="{{ article.title | escape }}" style="width:100%;margin-bottom:2rem;" width="{{ article.image.width }}" height="{{ article.image.height }}" fetchpriority="high">
+    {%- endif -%}
+    <div class="rte" style="color:var(--text);">{{ article.content }}</div>
+  </div>
+</article>
+
+{% schema %}
+{ "name": "Article", "tag": "section", "settings": [] }
+{% endschema %}

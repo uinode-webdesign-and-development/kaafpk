@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}" class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="{{ settings.color_bg }}">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+    <title>
+      {{ page_title }}{% if current_tags %} &ndash; {{ 'general.meta.tags' | t: tags: current_tags | join: ', ' }}{% endif %}{% if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
+    </title>
+
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+
+    {% comment %} Fonts: Shopify-hosted, non render-blocking, font-display: swap {% endcomment %}
+    {% assign heading_font = settings.heading_font %}
+    {% assign heading_bold = heading_font | font_modify: 'weight', 'bolder' %}
+    {% assign body_font = settings.body_font %}
+    {% assign body_bold = body_font | font_modify: 'weight', 'bold' %}
+    <style>
+      {{ heading_font | font_face: font_display: 'swap' }}
+      {{ heading_bold | font_face: font_display: 'swap' }}
+      {{ body_font | font_face: font_display: 'swap' }}
+      {{ body_bold | font_face: font_display: 'swap' }}
+
+      :root {
+        --bg: {{ settings.color_bg }};
+        --bg-elevated: {{ settings.color_bg_elevated }};
+        --surface: {{ settings.color_bg_elevated | color_lighten: 4 }};
+        --text: {{ settings.color_text }};
+        --text-muted: {{ settings.color_text_muted }};
+        --accent: {{ settings.color_accent }};
+        --accent-hover: {{ settings.color_accent | color_lighten: 8 }};
+        --accent-contrast: {{ settings.color_accent_contrast }};
+        --border: {{ settings.color_text | color_modify: 'alpha', 0.10 }};
+        --border-strong: {{ settings.color_text | color_modify: 'alpha', 0.22 }};
+        --shadow: 0 24px 60px {{ '#000000' | color_modify: 'alpha', 0.55 }};
+
+        --font-heading: {{ heading_font.family }}, {{ heading_font.fallback_families }};
+        --font-body: {{ body_font.family }}, {{ body_font.fallback_families }};
+        --font-heading-weight: {{ heading_font.weight }};
+        --font-body-weight: {{ body_font.weight }};
+        --heading-scale: {{ settings.heading_scale | divided_by: 100.0 }};
+
+        --page-max: 1440px;
+        --gutter: clamp(16px, 5vw, 64px);
+        --header-h: 64px;
+      }
+    </style>
+
+    {{ content_for_header }}
+
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+
+    <script>document.documentElement.className = document.documentElement.className.replace('no-js','js');</script>
+
+    {% comment %} ===== Meta Pixel (base code) ===== {% endcomment %}
+    {% render 'meta-pixel' %}
+  </head>
+
+  <body class="template-{{ template.name }}">
+    <a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_content' | t | default: 'Skip to content' }}</a>
+
+    {% sections 'header-group' %}
+
+    <main id="MainContent" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+
+    <div class="drawer-overlay" id="DrawerOverlay" data-drawer-close tabindex="-1"></div>
+    {% section 'cart-drawer' %}
+
+    <script>
+      window.KAAF = {
+        routes: {
+          cart: "{{ routes.cart_url }}",
+          cartAdd: "{{ routes.cart_add_url }}",
+          cartChange: "{{ routes.cart_change_url }}",
+          cartUpdate: "{{ routes.cart_update_url }}"
+        },
+        strings: {
+          added: {{ 'products.product.added_to_cart' | t | json }},
+          soldOut: {{ 'products.product.sold_out' | t | json }}
+        },
+        bundle: {
+          shirtTag: {{ settings.bundle_shirt_tag | json }},
+          trouserTag: {{ settings.bundle_trouser_tag | json }},
+          saving: {{ settings.bundle_saving | json }}
+        },
+        moneyFormat: {{ shop.money_format | json }}
+      };
+    </script>
+    <script src="{{ 'cart.js' | asset_url }}" defer></script>
+    <script src="{{ 'theme.js' | asset_url }}" defer></script>
+  </body>
+</html>

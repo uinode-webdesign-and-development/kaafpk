@@ -1,0 +1,219 @@
+{%- liquid
+  assign product = product
+  assign current_variant = product.selected_or_first_available_variant
+  assign product_images = product.media | where: 'media_type', 'image'
+  assign prepaid_saving = settings.prepaid_amount
+-%}
+
+<section class="page-width section-pad">
+  <div class="product">
+
+    {%- comment %} ============ GALLERY ============ {% endcomment -%}
+    <div class="product-gallery" data-gallery>
+      <div class="product-gallery__main">
+        {%- for media in product_images -%}
+          <div class="product-gallery__slide {% if forloop.first %}is-active{% endif %}" data-slide="{{ forloop.index0 }}">
+            <img src="{{ media | image_url: width: 1200 }}"
+                 srcset="{{ media | image_url: width: 700 }} 700w, {{ media | image_url: width: 1200 }} 1200w, {{ media | image_url: width: 1600 }} 1600w"
+                 sizes="(max-width: 989px) 100vw, 55vw"
+                 width="{{ media.width }}" height="{{ media.height }}"
+                 alt="{{ media.alt | default: product.title | escape }}"
+                 {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %} decoding="async">
+          </div>
+        {%- else -%}
+          <div class="product-gallery__slide is-active">{{ 'product-1' | placeholder_svg_tag: 'placeholder' }}</div>
+        {%- endfor -%}
+      </div>
+      {%- if product_images.size > 1 -%}
+        <div class="product-gallery__thumbs" role="tablist" aria-label="Product images">
+          {%- for media in product_images -%}
+            <button type="button" class="product-gallery__thumb {% if forloop.first %}is-active{% endif %}" role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" aria-label="Image {{ forloop.index }}">
+              <img src="{{ media | image_url: width: 160 }}" alt="" width="72" height="90" loading="lazy" decoding="async">
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment %} ============ INFO (block driven) ============ {% endcomment -%}
+    <div class="product-info">
+      <form data-product-form data-variants-id="ProductVariants-{{ section.id }}" action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id>
+
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+
+          {%- when 'title' -%}
+            <div {{ block.shopify_attributes }}>
+              {%- if product.vendor != blank and block.settings.show_vendor -%}
+                <span class="eyebrow">{{ product.vendor }}</span>
+              {%- endif -%}
+              <h1 class="h1 product-info__title">{{ product.title }}</h1>
+            </div>
+
+          {%- when 'price' -%}
+            <div {{ block.shopify_attributes }} data-atc-anchor>
+              <div class="product-price">
+                {% render 'price', product: product %}
+              </div>
+              {%- if settings.show_prepaid_badge -%}
+                <p class="muted" style="margin-top:.5rem;font-size:.9rem;">
+                  <span class="accent" style="font-weight:700;">Save Rs {{ prepaid_saving }}</span> when you pay via {{ settings.prepaid_methods }}.
+                </p>
+              {%- endif -%}
+            </div>
+
+          {%- when 'badges' -%}
+            <div class="product-badges" {{ block.shopify_attributes }}>
+              {%- if settings.show_prepaid_badge -%}
+                <span class="badge badge--prepaid">{% render 'icon', name: 'wallet' %} Save Rs {{ prepaid_saving }} · {{ settings.prepaid_methods }}</span>
+              {%- endif -%}
+              {%- if settings.show_cod_badge -%}
+                <span class="badge badge--cod">{% render 'icon', name: 'cash' %} COD available</span>
+              {%- endif -%}
+              {%- if block.settings.show_stock and current_variant.inventory_management == 'shopify' and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= 20 -%}
+                <span class="badge badge--stock">Only {{ current_variant.inventory_quantity }} left</span>
+              {%- endif -%}
+            </div>
+
+          {%- when 'variant_picker' -%}
+            <div {{ block.shopify_attributes }}>
+              {%- unless product.has_only_default_variant -%}
+                {%- for option in product.options_with_values -%}
+                  {%- assign is_size = false -%}
+                  {%- if option.name contains 'Size' or option.name contains 'size' -%}{%- assign is_size = true -%}{%- endif -%}
+                  <div class="variant-group">
+                    <div class="variant-group__head">
+                      <span class="variant-group__label">{{ option.name }}</span>
+                      {%- if is_size -%}
+                        <button type="button" class="size-guide-trigger" data-open-target="SizeGuideDrawer">{% render 'icon', name: 'ruler' %} Size guide</button>
+                      {%- endif -%}
+                    </div>
+                    <div class="size-options">
+                      {%- for value in option.values -%}
+                        {%- assign input_id = 'opt-' | append: option.position | append: '-' | append: forloop.index -%}
+                        <div class="size-option">
+                          <input type="radio"
+                                 id="{{ input_id }}"
+                                 name="option{{ option.position }}"
+                                 value="{{ value | escape }}"
+                                 data-option-index="{{ option.position | minus: 1 }}"
+                                 {% if option.selected_value == value %}checked{% endif %}>
+                          <label for="{{ input_id }}">{{ value }}</label>
+                        </div>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                {%- endfor -%}
+              {%- endunless -%}
+            </div>
+
+          {%- when 'quantity' -%}
+            <div class="qty-row" {{ block.shopify_attributes }}>
+              <div class="qty" data-qty>
+                <button type="button" data-qty-minus aria-label="Decrease quantity">&minus;</button>
+                <input type="number" name="quantity" value="1" min="1" inputmode="numeric" aria-label="Quantity">
+                <button type="button" data-qty-plus aria-label="Increase quantity">+</button>
+              </div>
+            </div>
+
+          {%- when 'buy_buttons' -%}
+            <div class="product-cta stack" {{ block.shopify_attributes }} style="margin-top:1.2rem;">
+              <button type="submit" class="btn btn--primary btn--block btn--lg" data-atc-btn
+                      data-atc-label="{{ block.settings.button_label | default: 'Add to cart' | escape }}"
+                      {% unless current_variant.available %}aria-disabled="true"{% endunless %}>
+                <span data-atc-text>{% if current_variant.available %}{{ block.settings.button_label | default: 'Add to cart' }}{% else %}Sold out{% endif %}</span>
+              </button>
+              {%- if block.settings.show_pair and block.settings.pair_product != blank -%}
+                {%- assign pair = block.settings.pair_product -%}
+                <a href="{{ pair.url }}" class="btn btn--ghost btn--block">Complete the set — add the {{ pair.title | downcase }} (save Rs {{ settings.bundle_saving }})</a>
+              {%- endif -%}
+            </div>
+
+          {%- when 'delivery' -%}
+            <div {{ block.shopify_attributes }}>
+              {% render 'delivery-estimate' %}
+            </div>
+
+          {%- when 'description' -%}
+            <div {{ block.shopify_attributes }}>
+              <hr class="product-divider">
+              <div class="accordion">
+                {%- if product.description != blank -%}
+                  <details class="accordion__item" open>
+                    <summary class="accordion__summary">Details <span class="plus"></span></summary>
+                    <div class="accordion__body rte">{{ product.description }}</div>
+                  </details>
+                {%- endif -%}
+                {%- if block.settings.materials != blank -%}
+                  <details class="accordion__item">
+                    <summary class="accordion__summary">Fabric &amp; care <span class="plus"></span></summary>
+                    <div class="accordion__body rte">{{ block.settings.materials }}</div>
+                  </details>
+                {%- endif -%}
+                {%- if block.settings.shipping != blank -%}
+                  <details class="accordion__item">
+                    <summary class="accordion__summary">Shipping &amp; returns <span class="plus"></span></summary>
+                    <div class="accordion__body rte">{{ block.settings.shipping }}</div>
+                  </details>
+                {%- endif -%}
+              </div>
+            </div>
+
+          {%- when 'text' -%}
+            <div {{ block.shopify_attributes }} class="rte" style="margin-top:1rem;">{{ block.settings.text }}</div>
+
+          {%- endcase -%}
+        {%- endfor -%}
+      </form>
+    </div>
+  </div>
+</section>
+
+{%- comment %} Variant data for JS {% endcomment -%}
+<script type="application/json" id="ProductVariants-{{ section.id }}">
+  {{ product.variants | json }}
+</script>
+
+{%- comment %} Sticky mobile add-to-cart {% endcomment -%}
+<div class="sticky-atc" data-sticky-atc aria-hidden="true">
+  <div class="sticky-atc__meta">
+    <div class="sticky-atc__title">{{ product.title }}</div>
+    <div class="sticky-atc__price" data-sticky-price>{{ current_variant.price | money }}</div>
+  </div>
+  <button type="button" class="btn btn--primary" data-sticky-atc-btn>Add to cart</button>
+</div>
+
+{% render 'size-guide-drawer' %}
+{% render 'product-schema', product: product %}
+
+{% schema %}
+{
+  "name": "Product",
+  "tag": "section",
+  "blocks": [
+    { "type": "title", "name": "Title", "limit": 1, "settings": [
+      { "type": "checkbox", "id": "show_vendor", "label": "Show vendor", "default": false }
+    ]},
+    { "type": "price", "name": "Price", "limit": 1, "settings": [] },
+    { "type": "badges", "name": "Badges (prepaid / COD / stock)", "limit": 1, "settings": [
+      { "type": "checkbox", "id": "show_stock", "label": "Show low-stock badge", "default": true }
+    ]},
+    { "type": "variant_picker", "name": "Size / variant picker", "limit": 1, "settings": [] },
+    { "type": "quantity", "name": "Quantity", "limit": 1, "settings": [] },
+    { "type": "buy_buttons", "name": "Buy buttons", "limit": 1, "settings": [
+      { "type": "text", "id": "button_label", "label": "Button label", "default": "Add to cart" },
+      { "type": "checkbox", "id": "show_pair", "label": "Show 'complete the set' link", "default": true },
+      { "type": "product", "id": "pair_product", "label": "Matching product (shirt/trouser)" }
+    ]},
+    { "type": "delivery", "name": "Delivery estimate", "limit": 1, "settings": [] },
+    { "type": "description", "name": "Description & tabs", "limit": 1, "settings": [
+      { "type": "richtext", "id": "materials", "label": "Fabric & care", "default": "<p>240 GSM poly-cotton blend. Mineral wash. Machine wash cold, inside out. Do not tumble dry. Iron low.</p>" },
+      { "type": "richtext", "id": "shipping", "label": "Shipping & returns", "default": "<p>COD available nationwide. Prepaid orders (JazzCash / Easypaisa / card) save extra. 7-day exchange on unworn items.</p>" }
+    ]},
+    { "type": "text", "name": "Text", "settings": [
+      { "type": "richtext", "id": "text", "label": "Text" }
+    ]}
+  ]
+}
+{% endschema %}

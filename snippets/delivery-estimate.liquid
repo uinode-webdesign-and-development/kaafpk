@@ -1,0 +1,35 @@
+{% comment %}
+  Delivery estimate by city. Metro cities get the fast window,
+  everywhere else the slower one. Values come from theme settings.
+{% endcomment %}
+{%- liquid
+  assign metro_cities = settings.delivery_metro_cities | split: ','
+-%}
+<div class="delivery-est" data-delivery
+     data-metro-days="{{ settings.delivery_metro_days }}"
+     data-other-days="{{ settings.delivery_other_days }}"
+     data-metro-cities="{{ settings.delivery_metro_cities | escape }}">
+  <div class="delivery-est__row">
+    {% render 'icon', name: 'truck' %}
+    <div>
+      <strong>{{ settings.delivery_metro_cities }}:</strong> {{ settings.delivery_metro_days }}
+      <span class="muted">· elsewhere in Pakistan: {{ settings.delivery_other_days }}</span>
+    </div>
+  </div>
+  <div class="delivery-est__city-input">
+    <label class="visually-hidden" for="DeliveryCity">Estimate delivery to your city</label>
+    <select id="DeliveryCity">
+      <option value="">Estimate to your city…</option>
+      {%- for city in metro_cities -%}
+        <option value="{{ city | strip }}">{{ city | strip }}</option>
+      {%- endfor -%}
+      <option value="Islamabad">Islamabad</option>
+      <option value="Rawalpindi">Rawalpindi</option>
+      <option value="Multan">Multan</option>
+      <option value="Peshawar">Peshawar</option>
+      <option value="Quetta">Quetta</option>
+      <option value="Other city">Other city</option>
+    </select>
+  </div>
+  <div class="delivery-est__result" data-delivery-result aria-live="polite"></div>
+</div>
